@@ -4,60 +4,80 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
 
 class UserController extends Controller
 {
+    /**
+     * Menampilkan daftar pengguna.
+     */
     public function index()
     {
-        $users = User::all();
+        $users = User::latest()->paginate(10);
         return view('admin.users.index', compact('users'));
     }
 
+    /**
+     * Menampilkan form tambah pengguna.
+     */
     public function create()
     {
         return view('admin.users.create');
     }
 
+    /**
+     * Menyimpan pengguna baru ke database.
+     */
     public function store(Request $request)
-    {
-        $request->validate([
-            'name' => 'required',
-            'email' => 'required|email|unique:users',
-            'password' => 'required|min:6',
-        ]);
+{
+    $validatedData = $request->validate([
+        'name' => 'required|string|max:255',
+        'email' => 'required|email|unique:users',
+        'password' => 'required|min:6', // Tambahkan validasi password
+    ]);
 
-        User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => bcrypt($request->password),
-        ]);
+    // Pastikan password di-hash sebelum disimpan
+    $validatedData['password'] = bcrypt($validatedData['password']);
 
-        return redirect()->route('admin.users.index')->with('success', 'Pengguna berhasil ditambahkan.');
-    }
+    User::create($validatedData);
 
+    return redirect()->to('/admin')->with('success', 'User berhasil ditambahkan!');
+}
+
+       
+
+    /**
+     * Menampilkan form edit pengguna.
+     */
     public function edit(User $user)
     {
         return view('admin.users.edit', compact('user'));
     }
 
+    /**
+     * Memperbarui data pengguna.
+     */
     public function update(Request $request, User $user)
     {
-        $request->validate([
-            'name' => 'required',
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email,' . $user->id,
         ]);
 
         $user->update([
-            'name' => $request->name,
-            'email' => $request->email,
+            'name' => $validatedData['name'],
+            'email' => $validatedData['email'],
         ]);
 
-        return redirect()->route('admin.users.index')->with('success', 'Pengguna berhasil diperbarui.');
+        return Redirect::to('/admin')->with('success', 'Pengguna berhasil diperbarui.');
     }
 
+    /**
+     * Menghapus pengguna.
+     */
     public function destroy(User $user)
     {
         $user->delete();
-        return redirect()->route('admin.users.index')->with('success', 'Pengguna berhasil dihapus.');
+        return Redirect::to('/admin')->with('success', 'Pengguna berhasil dihapus.');
     }
 }

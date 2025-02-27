@@ -17,7 +17,7 @@
                 @foreach ($users as $user)
                 <tr>
                     <td>{{ $loop->iteration }}</td>
-                    <td>{{ $user->nama }}</td>
+                    <td>{{ $user->name }}</td> {{-- Perbaikan dari $user->nama ke $user->name --}}
                     <td>{{ $user->email }}</td>
                     <td>
                         <a href="{{ route('users.edit', $user) }}" class="btn btn-warning btn-sm">Edit</a>

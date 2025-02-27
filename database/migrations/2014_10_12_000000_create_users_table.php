@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('email')->unique();
-            $table->string('password');
+            $table->string('password')->nulllble();
             $table->string('phone');
             $table->text('address');
             $table->timestamps();
@@ -27,6 +27,7 @@ return new class extends Migration
      */
     public function down(): void
     {
+        
         Schema::dropIfExists('users');
     }
 };
