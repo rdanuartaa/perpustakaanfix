@@ -11,7 +11,7 @@
             <input type="text" name="name" id="name" class="form-control" value="{{ $category->name }}" required>
         </div>
         <button type="submit" class="btn btn-success">Update</button>
-        <a href="{{ route('categories.index') }}" class="btn btn-secondary">Batal</a>
+        <a href="{{ route('admin.index') }}" class="btn btn-secondary">Batal</a>
     </form>
 </div>
 @endsection

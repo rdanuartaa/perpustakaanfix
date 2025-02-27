@@ -10,56 +10,67 @@ class BookController extends Controller
 {
     public function index()
     {
-        $books = Book::with('category')->get();
-        return view('admin.books.index', compact('books'));
+        $books = Book::with('category')->latest()->paginate(10);
+        return view('admin.books.index', ['books' => $books]);
     }
 
     public function create()
     {
-        $categories = Category::all();
-        return view('admin.books.create', compact('categories'));
+        $categories = Category::orderBy('name')->get();
+        return view('admin.books.create', ['categories' => $categories]);
     }
 
     public function store(Request $request)
     {
-        $request->validate([
-            'title' => 'required',
-            'author' => 'required',
+        $validatedData = $request->validate([
+            'title' => 'required|string|max:255',
+            'author' => 'required|string|max:255',
             'category_id' => 'required|exists:categories,id',
+            'stock' => 'required|integer|min:0',
         ]);
 
-        Book::create($request->all());
+        $book = new Book();
+        $book->title = $validatedData['title'];
+        $book->author = $validatedData['author'];
+        $book->category_id = $validatedData['category_id'];
+        $book->stock = $validatedData['stock'];
+        $book->save();
 
-        return redirect()->route('admin.books.index')->with('success', 'Buku berhasil ditambahkan.');
+        return redirect()->to('/admin')->with('success', 'Buku berhasil ditambahkan');
     }
 
     public function show(Book $book)
     {
-        return view('books.show', compact('book'));
+        return redirect()->to('/admin')->with('success');
     }
 
     public function edit(Book $book)
     {
-        $categories = Category::all();
-        return view('admin.books.edit', compact('book', 'categories'));
+        $categories = Category::orderBy('name')->get();
+        return view('admin.books.edit', ['book' => $book, 'categories' => $categories]);
     }
 
     public function update(Request $request, Book $book)
     {
-        $request->validate([
-            'title' => 'required',
-            'author' => 'required',
+        $validatedData = $request->validate([
+            'title' => 'required|string|max:255',
+            'author' => 'required|string|max:255',
             'category_id' => 'required|exists:categories,id',
+            'stock' => 'required|integer|min:0',
         ]);
 
-        $book->update($request->all());
+        $book->title = $validatedData['title'];
+        $book->author = $validatedData['author'];
+        $book->category_id = $validatedData['category_id'];
+        $book->stock = $validatedData['stock'];
+        $book->save();
 
-        return redirect()->route('admin.books.index')->with('success', 'Buku berhasil diperbarui.');
+        return redirect()->to('/admin')->with('success', 'Buku berhasil diperbarui.');
     }
 
     public function destroy(Book $book)
     {
         $book->delete();
-        return redirect()->route('admin.books.index')->with('success', 'Buku berhasil dihapus.');
+        return redirect()->to('/admin')->with('success', 'Buku berhasil dihapus.');
     }
 }
