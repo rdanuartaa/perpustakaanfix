@@ -10,7 +10,7 @@ class InventoryController extends Controller
     public function index()
     {
         $inventories = Inventory::all();
-        return view('admin.inventories.index', compact('inventories'));
+        return view('inventories.index', compact('inventories'));
     }
 
     public function create()
@@ -21,12 +21,18 @@ class InventoryController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'nama' => 'required',
-            'jumlah' => 'required|integer',
+            'nama' => 'required|string|max:255',
+            'jumlah' => 'required|integer'
         ]);
 
         Inventory::create($request->all());
-        return redirect()->route('admin.inventories.index')->with('success', 'Inventaris berhasil ditambahkan.');
+
+        return redirect()->to('/admin')->with('success', 'Inventaris berhasil ditambahkan.');
+    }
+
+    public function show(Inventory $inventory)
+    {
+        return view('.inventories.show', compact('inventory'));
     }
 
     public function edit(Inventory $inventory)
@@ -37,17 +43,18 @@ class InventoryController extends Controller
     public function update(Request $request, Inventory $inventory)
     {
         $request->validate([
-            'nama' => 'required',
-            'jumlah' => 'required|integer',
+            'nama' => 'required|string|max:255',
+            'jumlah' => 'required|integer'
         ]);
 
         $inventory->update($request->all());
-        return redirect()->route('admin.inventories.index')->with('success', 'Inventaris berhasil diperbarui.');
+
+        return redirect()->to('/admin')->with('success', 'Inventaris berhasil diperbarui.');
     }
 
     public function destroy(Inventory $inventory)
     {
         $inventory->delete();
-        return redirect()->route('admin.inventories.index')->with('success', 'Inventaris berhasil dihapus.');
+        return redirect()->to('/admin')->with('success', 'Inventaris berhasil dihapus.');
     }
 }
