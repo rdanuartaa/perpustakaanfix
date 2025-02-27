@@ -27,7 +27,7 @@
             </select>
         </div>
         <button type="submit" class="btn btn-primary">Simpan</button>
-        <a href="{{ route('admin.index') }}" class="btn btn-secondary">Kembali</a>
+        <a href="{{ route('books.index') }}" class="btn btn-secondary">Kembali</a>
     </form>
 </div>
 @endsection
