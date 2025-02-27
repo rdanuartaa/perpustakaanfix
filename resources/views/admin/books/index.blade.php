@@ -20,7 +20,7 @@
                     <td>{{ $loop->iteration }}</td>
                     <td>{{ $book->title }}</td>
                     <td>{{ $book->author }}</td>
-                    <td>{{ $book->category->name }}</td>
+                    
                     <td>
                         <a href="{{ route('books.edit', $book) }}" class="btn btn-warning btn-sm">Edit</a>
                         <form action="{{ route('books.destroy', $book) }}" method="POST" class="d-inline">
