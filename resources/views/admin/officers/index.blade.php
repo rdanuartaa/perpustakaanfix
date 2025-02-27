@@ -3,6 +3,11 @@
         <h5>Daftar Officer</h5>
     </div>
     <div class="card-body">
+        @if(session('success'))
+            <div class="alert alert-success">
+                {{ session('success') }}
+            </div>
+        @endif
         <a href="{{ route('officers.create') }}" class="btn btn-primary mb-2">Tambah Officer</a>
         <table class="table">
             <thead>
@@ -17,7 +22,7 @@
                 @foreach ($officers as $officer)
                 <tr>
                     <td>{{ $loop->iteration }}</td>
-                    <td>{{ $officer->nama }}</td>
+                    <td>{{ $officer->name }}</td>
                     <td>{{ $officer->email }}</td>
                     <td>
                         <a href="{{ route('officers.edit', $officer) }}" class="btn btn-warning btn-sm">Edit</a>
