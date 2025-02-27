@@ -18,7 +18,7 @@ Route::get('/admin', function () {
         'officers' => App\Models\Officer::all(),
         'users' => App\Models\User::all(),
     ]);
-});
+})->name('admin.index');
 
 Route::resource('books', BookController::class);
 Route::resource('categories', CategoryController::class);
