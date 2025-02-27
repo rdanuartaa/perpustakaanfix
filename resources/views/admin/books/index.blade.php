@@ -11,6 +11,7 @@
                     <th>Judul</th>
                     <th>Penulis</th>
                     <th>Kategori</th>
+                    <th>Stok</th>
                     <th>Aksi</th>
                 </tr>
             </thead>
@@ -21,6 +22,7 @@
                     <td>{{ $book->title }}</td>
                     <td>{{ $book->author }}</td>
                     <td>{{ $book->category->name }}</td>
+                    <td>{{ $book->stock }}</td>
                     <td>
                         <a href="{{ route('books.edit', $book) }}" class="btn btn-warning btn-sm">Edit</a>
                         <form action="{{ route('books.destroy', $book) }}" method="POST" class="d-inline">
@@ -35,3 +37,8 @@
         </table>
     </div>
 </div>
+@if(session('success'))
+    <div class="alert alert-success">
+        {{ session('success') }}
+    </div>
+@endif
