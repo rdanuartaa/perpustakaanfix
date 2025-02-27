@@ -3,11 +3,6 @@
         <h5>Daftar Officer</h5>
     </div>
     <div class="card-body">
-        @if(session('success'))
-            <div class="alert alert-success">
-                {{ session('success') }}
-            </div>
-        @endif
         <a href="{{ route('officers.create') }}" class="btn btn-primary mb-2">Tambah Officer</a>
         <table class="table">
             <thead>
@@ -15,6 +10,7 @@
                     <th>No</th>
                     <th>Nama</th>
                     <th>Email</th>
+                    <th>role</th>
                     <th>Aksi</th>
                 </tr>
             </thead>
@@ -24,6 +20,7 @@
                     <td>{{ $loop->iteration }}</td>
                     <td>{{ $officer->name }}</td>
                     <td>{{ $officer->email }}</td>
+                    <td>{{ $officer->role }}</td>
                     <td>
                         <a href="{{ route('officers.edit', $officer) }}" class="btn btn-warning btn-sm">Edit</a>
                         <form action="{{ route('officers.destroy', $officer) }}" method="POST" class="d-inline">
@@ -38,3 +35,8 @@
         </table>
     </div>
 </div>
+@if(session('success'))
+    <div class="alert alert-success">
+        {{ session('success') }}
+    </div>
+@endif

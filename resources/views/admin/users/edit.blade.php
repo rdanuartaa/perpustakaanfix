@@ -30,7 +30,7 @@
 
         <div class="d-flex">
             <!-- Tombol Update -->
-            <button type="submit" class="btn btn-success me-2">Update</button>
+            <button type="submit" class="btn btn-primary">Simpan</button>
 
             <!-- Tombol Kembali -->
             <a href="{{ route('users.index') }}" class="btn btn-secondary">Kembali</a>
