@@ -1,5 +1,6 @@
 <?php
 
+// Controller untuk CRUD
 namespace App\Http\Controllers;
 
 use App\Models\Officer;
@@ -22,11 +23,21 @@ class OfficerController extends Controller
     {
         $request->validate([
             'nama' => 'required',
-            'jabatan' => 'required',
+            'email' => 'required|email|unique:officers,email',
+            'phone' => 'required',
+            'role' => 'required|in:admin,staff',
         ]);
 
-        Officer::create($request->all());
-        return redirect()->route('admin.officers.index')->with('success', 'Petugas berhasil ditambahkan.');
+        // Menggunakan nama kolom 'name' di database (bukan 'nama')
+        $officer = new Officer();
+        $officer->name = $request->nama;  // form field 'nama' disimpan ke kolom 'name'
+        $officer->email = $request->email;
+        $officer->phone = $request->phone;
+        $officer->role = $request->role;
+        $officer->save();
+
+        // Redirect ke halaman admin
+        return redirect()->to('/admin')->with('success', 'Officer berhasil ditambahkan.');
     }
 
     public function edit(Officer $officer)
@@ -38,16 +49,26 @@ class OfficerController extends Controller
     {
         $request->validate([
             'nama' => 'required',
-            'jabatan' => 'required',
+            'email' => 'required|email|unique:officers,email,' . $officer->id,
+            'phone' => 'required',
+            'role' => 'required|in:admin,staff',
         ]);
 
-        $officer->update($request->all());
-        return redirect()->route('admin.officers.index')->with('success', 'Petugas berhasil diperbarui.');
+        // Menggunakan nama kolom 'name' di database (bukan 'nama')
+        $officer->name = $request->nama;  // form field 'nama' disimpan ke kolom 'name'
+        $officer->email = $request->email;
+        $officer->phone = $request->phone;
+        $officer->role = $request->role;
+        $officer->save();
+
+        // Redirect ke halaman admin
+        return redirect()->to('/admin')->with('success', 'Officer berhasil diupdate.');
     }
 
     public function destroy(Officer $officer)
     {
         $officer->delete();
-        return redirect()->route('admin.officers.index')->with('success', 'Petugas berhasil dihapus.');
+        // Redirect ke halaman admin
+        return redirect()->to('/admin')->with('success', 'Officer berhasil dihapus.');
     }
 }

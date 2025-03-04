@@ -10,6 +10,7 @@
                     <th>No</th>
                     <th>Nama</th>
                     <th>Email</th>
+                    <th>role</th>
                     <th>Aksi</th>
                 </tr>
             </thead>
@@ -17,8 +18,9 @@
                 @foreach ($officers as $officer)
                 <tr>
                     <td>{{ $loop->iteration }}</td>
-                    <td>{{ $officer->nama }}</td>
+                    <td>{{ $officer->name }}</td>
                     <td>{{ $officer->email }}</td>
+                    <td>{{ $officer->role }}</td>
                     <td>
                         <a href="{{ route('officers.edit', $officer) }}" class="btn btn-warning btn-sm">Edit</a>
                         <form action="{{ route('officers.destroy', $officer) }}" method="POST" class="d-inline">
@@ -33,3 +35,8 @@
         </table>
     </div>
 </div>
+@if(session('success'))
+    <div class="alert alert-success">
+        {{ session('success') }}
+    </div>
+@endif
