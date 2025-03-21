@@ -10,18 +10,13 @@ use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
-    /**
-     * Menampilkan daftar pengguna.
-     */
     public function index()
     {
         $users = User::latest()->paginate(10);
         return response()->json($users);
     }
 
-    /**
-     * Menyimpan pengguna baru ke database.
-     */
+    
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -43,36 +38,25 @@ class UserController extends Controller
         return response()->json(['message' => 'User berhasil ditambahkan!', 'user' => $user], 201);
     }
 
-    /**
-     * Menampilkan detail pengguna tertentu.
-     */
+  
     public function show(User $user)
     {
         return response()->json($user);
     }
 
-    /**
-     * Memperbarui data pengguna.
-     */
-    public function update(Request $request, User $user)
+   
+    public function update(Request $request, $id)
     {
-        $validator = Validator::make($request->all(), [
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email,' . $user->id,
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 422);
+        $user = User::find($id);
+        if (!$user) {
+            return response()->json(['message' => 'User not found'], 404);
         }
-
-        $user->update($request->only('name', 'email'));
-
-        return response()->json(['message' => 'User berhasil diperbarui.', 'user' => $user]);
+    
+        $user->update($request->only(['name', 'email', 'password']));
+    
+        return response()->json(['message' => 'User updated successfully', 'data' => $user]);
     }
-
-    /**
-     * Menghapus pengguna.
-     */
+    
     public function destroy(User $user)
     {
         $user->delete();
